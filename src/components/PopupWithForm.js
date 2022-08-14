@@ -1,30 +1,30 @@
 import React from 'react';
 
-export default function PopupWithForm(props) {
+export default function PopupWithForm({ name, title, children, btnText, onClose, isOpen}) {
   return (
     <div
-      className={`popup popup_type_${props.name} popup_type_form ${
-        props.isOpen && "popup_active"
+      className={`popup popup_type_${name} popup_type_form ${
+        isOpen && "popup_active"
       }`}
     >
       <div className="popup__window">
-        <h3 className="popup__title">{props.title}</h3>
+        <h3 className="popup__title">{title}</h3>
         <form
           className="popup__form"
-          name={props.name}
+          name={name}
           autoComplete="off"
           noValidate
         >
-          {props.children}
+          {children}
           <button className="popup__submit-btn" type="submit" >
-            {props.btnText}
+            {btnText}
           </button>
         </form>
         <button
           className="popup__close-btn"
           type="button"
           aria-label="Закрыть форму."
-          onClick={props.onClose}
+          onClick={onClose}
         ></button>
       </div>
     </div>

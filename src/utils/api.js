@@ -1,10 +1,11 @@
-import {apiSettings} from './constants.js';
+import { apiSettings } from "./constants.js";
 
 class Api {
-  constructor({ token, cohort, serverUrl }) {
+  constructor({ token, cohort, serverUrl, appJson }) {
     this._token = token;
     this._cohort = cohort;
     this._serverUrl = serverUrl;
+    this._appJson = appJson;
   }
 
   _getCardsUrl() {
@@ -37,7 +38,7 @@ class Api {
       method: "PATCH",
       headers: {
         authorization: this._token,
-        "Content-Type": "application/json",
+        "Content-Type": this._appJson,
       },
       body: JSON.stringify({
         name,
@@ -51,7 +52,7 @@ class Api {
       method: "PATCH",
       headers: {
         authorization: this._token,
-        "Content-Type": "application/json",
+        "Content-Type": this._appJson,
       },
       body: JSON.stringify({ avatar: url }),
     }).then(this._handlerPromise);
@@ -70,7 +71,7 @@ class Api {
       method: "POST",
       headers: {
         authorization: this._token,
-        "Content-Type": "application/json",
+        "Content-Type": this._appJson,
       },
       body: JSON.stringify({ name, link }),
     }).then(this._handlerPromise);
@@ -78,28 +79,28 @@ class Api {
 
   delCard(cardId) {
     return fetch(`${this._getCardsUrl()}/${cardId}`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        authorization: this._token
-      }
+        authorization: this._token,
+      },
     }).then(this._handlerPromise);
   }
 
   putLike(cardId) {
     return fetch(`${this._getCardsUrl()}//${cardId}/likes`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        authorization: this._token
-      }
+        authorization: this._token,
+      },
     }).then(this._handlerPromise);
   }
 
   deleteLike(cardId) {
     return fetch(`${this._getCardsUrl()}//${cardId}/likes`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        authorization: this._token
-      }
+        authorization: this._token,
+      },
     }).then(this._handlerPromise);
   }
 }
