@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Card({ data, onCardClick }) {
   function handleClick() {
     onCardClick(data);
