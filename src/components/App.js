@@ -19,14 +19,12 @@ export default function App() {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    api
-      .getInitialCards()
-      .then((cards) => {
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userData, cards]) => {
+        setCurrentUser(userData);
         setCards(cards);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(err => console.log(err));
   }, []);
 
   const handleCardLike = (card) => {
@@ -61,13 +59,6 @@ export default function App() {
       })
       .catch((err) => console.log(err));
   };
-
-  useEffect(() => {
-    api
-      .getUserInfo()
-      .then((userData) => setCurrentUser(userData))
-      .catch((err) => console.error(`${err}`));
-  }, []);
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
