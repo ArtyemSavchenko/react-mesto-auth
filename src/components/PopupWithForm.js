@@ -1,4 +1,4 @@
-export default function PopupWithForm({ name, title, children, btnText, onClose, isOpen}) {
+export default function PopupWithForm({ name, title, children, btnText, onClose, isOpen, onSubmit}) {
   return (
     <div
       className={`popup popup_type_${name} popup_type_form ${
@@ -12,6 +12,7 @@ export default function PopupWithForm({ name, title, children, btnText, onClose,
           name={name}
           autoComplete="off"
           noValidate
+          onSubmit={onSubmit}
         >
           {children}
           <button className="popup__submit-btn" type="submit" >

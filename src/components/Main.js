@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Card from "./Card";
 import { api } from "../utils/api.js";
+import { CurrentUserInfo } from "../contexts/CurrentUserContext";
 
 export default function Main({
   onEditAvatar,
@@ -8,17 +9,14 @@ export default function Main({
   onAddPlace,
   onCardClick,
 }) {
-  const [userName, setUserName] = useState("");
-  const [userDescription, setUserDescription] = useState("");
-  const [userAvatar, setUserAvatar] = useState("");
   const [cards, setCards] = useState([]);
 
+  const user = useContext(CurrentUserInfo);
+
   useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([userData, cards]) => {
-        setUserName(userData.name);
-        setUserDescription(userData.about);
-        setUserAvatar(userData.avatar);
+    api
+      .getInitialCards()
+      .then((cards) => {
         setCards(cards);
       })
       .catch((err) => {
@@ -26,19 +24,46 @@ export default function Main({
       });
   }, []);
 
+  const handleCardLike = (card) => {
+    const isLiked = card.likes.some((like) => like._id === user._id);
+
+    if (!isLiked) {
+      api.putLike(card._id).then((newCard) => {
+        setCards((cards) =>
+          cards.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch(err => console.log(err));
+    } else {
+      api.deleteLike(card._id).then((newCard) => {
+        setCards((cards) =>
+          cards.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch(err => console.log(err));
+    }
+  };
+
+  const handleCardDelete = (card) => {
+    api.delCard(card._id).then(() => {
+      setCards((cards) => cards.filter((c) => c._id !== card._id));
+    })
+    .catch(err => console.log(err));
+  };
+
   return (
     <main className="content">
       <section className="profile page__section">
         <div className="profile__user-pic-box" onClick={onEditAvatar}>
           <img
             className="profile__user-pic"
-            src={userAvatar}
+            src={user.avatar}
             alt="Картинка профиля."
           />
         </div>
 
         <div className="profile__user-info-box">
-          <h1 className="profile__name">{userName}</h1>
+          <h1 className="profile__name">{user.name}</h1>
           <button
             className="profile__edit-btn"
             type="button"
@@ -46,7 +71,7 @@ export default function Main({
             aria-label="Рекдатировать профиль."
           ></button>
 
-          <p className="profile__about">{userDescription}</p>
+          <p className="profile__about">{user.about}</p>
         </div>
         <button
           className="profile__add-card"
@@ -58,7 +83,13 @@ export default function Main({
 
       <section className="cards page__section" aria-label="Места.">
         {cards.map((data) => (
-          <Card key={data._id} data={data} onCardClick={onCardClick} />
+          <Card
+            key={data._id}
+            data={data}
+            onCardClick={onCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+          />
         ))}
       </section>
     </main>
