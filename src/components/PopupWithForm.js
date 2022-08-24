@@ -1,9 +1,15 @@
 export default function PopupWithForm({ name, title, children, btnText, onClose, isOpen, onSubmit}) {
+  const handlerOverlayClick = (e) => {
+    if(e.target === e.currentTarget)
+      onClose();
+  }
+  
   return (
     <div
       className={`popup popup_type_${name} popup_type_form ${
         isOpen && "popup_active"
       }`}
+      onClick={handlerOverlayClick}
     >
       <div className="popup__window">
         <h3 className="popup__title">{title}</h3>

@@ -1,6 +1,11 @@
 export default function ImagePopup({ card, onClose}) {
+  const handlerOverlayClick = (e) => {
+    if(e.target === e.currentTarget)
+      onClose();
+  }
+
   return (
-    <div className={`popup popup_type_image ${card && "popup_active"}`}>
+    <div className={`popup popup_type_image ${card && "popup_active"}`} onClick={handlerOverlayClick}>
       <div className="card-image">
         <figure className="card-image__box">
           <img
