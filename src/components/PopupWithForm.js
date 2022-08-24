@@ -1,4 +1,4 @@
-export default function PopupWithForm({ name, title, children, btnText, onClose, isOpen, onSubmit}) {
+export default function PopupWithForm({ name, title, children, btnText, onClose, isOpen, onSubmit, isLoading}) {
   const handlerOverlayClick = (e) => {
     if(e.target === e.currentTarget)
       onClose();
@@ -17,11 +17,11 @@ export default function PopupWithForm({ name, title, children, btnText, onClose,
           className="popup__form"
           name={name}
           autoComplete="off"
-          noValidate
+          // noValidate
           onSubmit={onSubmit}
         >
           {children}
-          <button className="popup__submit-btn" type="submit" >
+          <button className="popup__submit-btn" type="submit" disabled={isLoading} >
             {btnText}
           </button>
         </form>

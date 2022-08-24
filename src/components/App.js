@@ -14,6 +14,9 @@ export default function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditProfileLoading, setIsEditProfileLoading] = useState(false);
+  const [isEditAvatarLoading, setIsEditAvatarLoading] = useState(false);
+  const [isAddPlaceLoading, setIsAddPlaceLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -24,7 +27,7 @@ export default function App() {
         setCurrentUser(userData);
         setCards(cards);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }, []);
 
   const handleCardLike = (card) => {
@@ -77,33 +80,51 @@ export default function App() {
   }
 
   const handleUpdateUser = (userData) => {
+    setIsEditProfileLoading(true);
     api
       .patchUserInfo(userData.name, userData.about)
       .then((newUserData) => {
         setCurrentUser(newUserData);
         closeAllPopups();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsEditProfileLoading(false);
+      });
   };
 
   const handleUpdateAvatar = (url) => {
+    setIsEditAvatarLoading(true);
     api
       .patchAvatar(url)
       .then((userInfo) => {
         setCurrentUser(userInfo);
         closeAllPopups();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsEditAvatarLoading(false);
+      });
   };
 
   const handleAddPlaceSubmit = (cardData) => {
+    setIsAddPlaceLoading(true);
     api
       .postCard(cardData.name, cardData.link)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsAddPlaceLoading(false);
+      });
   };
 
   function closeAllPopups() {
@@ -136,16 +157,19 @@ export default function App() {
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
+          isLoading={isEditAvatarLoading}
         />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+          isLoading={isEditProfileLoading}
         />
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
+          isLoading={isAddPlaceLoading}
         />
         <PopupWithForm name="del-card" title="Вы уверены?" btnText="Да" />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />

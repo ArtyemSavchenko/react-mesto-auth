@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import PopupWithForm from "./PopupWithForm";
 
-export default function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
+export default function EditAvatarPopup({isOpen, onClose, onUpdateAvatar, isLoading}) {
   const inputUrlref = useRef();
 
   const handleSubmit = (e) => {
@@ -14,10 +14,11 @@ export default function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
     <PopupWithForm
       name="user-pic-update"
       title="Обновить аватар"
-      btnText="Сохранить"
+      btnText={isLoading ? "Сохранение..." : "Сохранить"}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      isLoading={isLoading}
     >
       <input
         type="url"
