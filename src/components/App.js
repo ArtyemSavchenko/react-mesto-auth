@@ -32,6 +32,19 @@ export default function App() {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleEditProfileClick = () => {
+    setIsEditProfilePopupOpen(true);
+  }
+  const handleEditAvatarClick = () => {
+    setIsEditAvatarPopupOpen(true);
+  }
+  const handleAddPlaceClick = () => {
+    setIsAddPlacePopupOpen(true);
+  }
+  const handleCardClick = (card) => {
+    setSelectedCard(card);
+  }
+
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((like) => like._id === currentUser._id);
 
@@ -69,22 +82,6 @@ export default function App() {
         setIsDeleteCardLoading(false);
       });
   };
-
-  function handleEditProfileClick() {
-    setIsEditProfilePopupOpen(true);
-  }
-
-  function handleEditAvatarClick() {
-    setIsEditAvatarPopupOpen(true);
-  }
-
-  function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(true);
-  }
-
-  function handleCardClick(card) {
-    setSelectedCard(card);
-  }
 
   const handleUpdateUser = (userData) => {
     setIsEditProfileLoading(true);
@@ -134,7 +131,7 @@ export default function App() {
       });
   };
 
-  function closeAllPopups() {
+  const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
