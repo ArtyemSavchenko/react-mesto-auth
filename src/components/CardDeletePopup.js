@@ -10,7 +10,7 @@ export default function CardDeletePopup({ onClose, onCardDelete, isLoading, dele
     <PopupWithForm
       title="Вы уверены?"
       btnText={isLoading ? "Удаление..." : "Да"}
-      isOpen={deletingCard}
+      isOpen={Object.keys(deletingCard).length}
       onClose={onClose}
       onSubmit={handleSubmit}
       isLoading={isLoading}
