@@ -18,5 +18,6 @@ npm run build
 ```
 Собранный проект попадает в папку /build.
 
-
+---
+Проект дорабатывается согласно учебному плану.  
 [`Демо`](https://artyemsavchenko.github.io/mesto-react/)
