@@ -1,20 +1,25 @@
 import { useRef } from 'react';
-import PopupWithForm from "./PopupWithForm";
+import PopupWithForm from './PopupWithForm';
 
-export default function EditAvatarPopup({isOpen, onClose, onUpdateAvatar, isLoading}) {
+export default function EditAvatarPopup({
+  isOpen,
+  onClose,
+  onUpdateAvatar,
+  isLoading
+}) {
   const inputUrlref = useRef();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     onUpdateAvatar(inputUrlref.current.value);
     inputUrlref.current.value = '';
-  }
+  };
 
   return (
     <PopupWithForm
       name="user-pic-update"
       title="Обновить аватар"
-      btnText={isLoading ? "Сохранение..." : "Сохранить"}
+      btnText={isLoading ? 'Сохранение...' : 'Сохранить'}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}

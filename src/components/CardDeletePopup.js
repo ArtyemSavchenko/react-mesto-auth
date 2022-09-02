@@ -1,15 +1,20 @@
-import PopupWithForm from "./PopupWithForm";
+import PopupWithForm from './PopupWithForm';
 
-export default function CardDeletePopup({ onClose, onCardDelete, isLoading, deletingCard }) {
-  const handleSubmit = (e) => {
+export default function CardDeletePopup({
+  onClose,
+  onCardDelete,
+  isLoading,
+  deletingCard
+}) {
+  const handleSubmit = e => {
     e.preventDefault();
     onCardDelete(deletingCard);
-  }
+  };
 
   return (
     <PopupWithForm
       title="Вы уверены?"
-      btnText={isLoading ? "Удаление..." : "Да"}
+      btnText={isLoading ? 'Удаление...' : 'Да'}
       isOpen={Object.keys(deletingCard).length}
       onClose={onClose}
       onSubmit={handleSubmit}

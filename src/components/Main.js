@@ -1,6 +1,6 @@
-import { useContext } from "react";
-import Card from "./Card";
-import { CurrentUserInfo } from "../contexts/CurrentUserContext";
+import { useContext } from 'react';
+import Card from './Card';
+import { CurrentUserInfo } from '../contexts/CurrentUserContext';
 
 export default function Main({
   onEditAvatar,
@@ -11,11 +11,10 @@ export default function Main({
   onCardDelete,
   cards
 }) {
-
   const user = useContext(CurrentUserInfo);
 
   return (
-    <main className="content">
+    <main className="page__content">
       <section className="profile page__section">
         <div className="profile__user-pic-box" onClick={onEditAvatar}>
           <img
@@ -45,7 +44,7 @@ export default function Main({
       </section>
 
       <section className="cards page__section" aria-label="Места.">
-        {cards.map((data) => (
+        {cards.map(data => (
           <Card
             key={data._id}
             data={data}

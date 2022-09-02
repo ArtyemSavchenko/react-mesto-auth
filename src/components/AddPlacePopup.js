@@ -1,33 +1,38 @@
 import { useState } from 'react';
-import PopupWithForm from "./PopupWithForm";
+import PopupWithForm from './PopupWithForm';
 
-export default function AddPlacePopup ({ isOpen, onClose, onAddPlace, isLoading }) {
+export default function AddPlacePopup({
+  isOpen,
+  onClose,
+  onAddPlace,
+  isLoading
+}) {
   const [cardName, setCardName] = useState('');
   const [cardUrl, setCardUrl] = useState('');
-  
-  const handleChangeCardName = (e) => {
+
+  const handleChangeCardName = e => {
     setCardName(e.target.value);
-  }
+  };
 
-  const handleChangeCardUrl = (e) => {
+  const handleChangeCardUrl = e => {
     setCardUrl(e.target.value);
-  }
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     onAddPlace({
       name: cardName,
-      link: cardUrl,
+      link: cardUrl
     });
     setCardName('');
     setCardUrl('');
-  }
+  };
 
   return (
     <PopupWithForm
       name="add-card"
       title="Новое место"
-      btnText={isLoading ? "Сохранение..." : "Сохранить"}
+      btnText={isLoading ? 'Сохранение...' : 'Сохранить'}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}

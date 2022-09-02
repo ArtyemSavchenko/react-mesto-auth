@@ -2,7 +2,12 @@ import { useState, useContext, useEffect } from 'react';
 import { CurrentUserInfo } from '../contexts/CurrentUserContext';
 import PopupWithForm from './PopupWithForm';
 
-export default function EditProfilePopup({ isOpen,  onClose, onUpdateUser, isLoading }) {
+export default function EditProfilePopup({
+  isOpen,
+  onClose,
+  onUpdateUser,
+  isLoading
+}) {
   const currentUser = useContext(CurrentUserInfo);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -10,29 +15,21 @@ export default function EditProfilePopup({ isOpen,  onClose, onUpdateUser, isLoa
   useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser, isOpen])
+  }, [currentUser, isOpen]);
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  }
-
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
-  }
-
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     onUpdateUser({
       name,
-      about: description,
+      about: description
     });
-  }
+  };
 
   return (
     <PopupWithForm
       name="profile-edit"
       title="Редактировать профиль"
-      btnText={isLoading ? "Сохранение..." : "Сохранить"}
+      btnText={isLoading ? 'Сохранение...' : 'Сохранить'}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
@@ -48,7 +45,7 @@ export default function EditProfilePopup({ isOpen,  onClose, onUpdateUser, isLoa
         minLength="2"
         maxLength="40"
         value={name}
-        onChange={handleNameChange}
+        onChange={e => setName(e.target.value)}
       />
       <span className="popup__input-error user-name-input-error"></span>
       <input
@@ -61,9 +58,9 @@ export default function EditProfilePopup({ isOpen,  onClose, onUpdateUser, isLoa
         minLength="2"
         maxLength="200"
         value={description}
-        onChange={handleDescriptionChange}
+        onChange={e => setDescription(e.target.value)}
       />
       <span className="popup__input-error user-about-input-error"></span>
     </PopupWithForm>
-  )
+  );
 }

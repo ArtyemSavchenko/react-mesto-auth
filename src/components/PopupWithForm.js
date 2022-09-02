@@ -1,13 +1,21 @@
-export default function PopupWithForm({ name, title, children, btnText, onClose, isOpen, onSubmit, isLoading}) {
-  const handlerOverlayClick = (e) => {
-    if(e.target === e.currentTarget)
-      onClose();
-  }
-  
+export default function PopupWithForm({
+  name,
+  title,
+  children,
+  btnText,
+  onClose,
+  isOpen,
+  onSubmit,
+  isLoading
+}) {
+  const handlerOverlayClick = e => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
   return (
     <div
       className={`popup popup_type_${name} popup_type_form ${
-        isOpen && "popup_active"
+        isOpen && 'popup_active'
       }`}
       onClick={handlerOverlayClick}
     >
@@ -21,7 +29,11 @@ export default function PopupWithForm({ name, title, children, btnText, onClose,
           onSubmit={onSubmit}
         >
           {children}
-          <button className="popup__submit-btn" type="submit" disabled={isLoading} >
+          <button
+            className="popup__submit-btn"
+            type="submit"
+            disabled={isLoading}
+          >
             {btnText}
           </button>
         </form>
