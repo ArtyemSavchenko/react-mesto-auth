@@ -3,6 +3,10 @@
   box-sizing: border-box;
   border-bottom: 1px solid rgba(84, 84, 84, .7);
   padding: 28px 27px 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 24px;
 }
 
 @media (min-width: 768px) {

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function Registration() {
   return (
     <main className="page__content">
-      <section className="page__section" aria-labe="Секция регистрации.">
+      <section className="page__section" aria-label="Секция регистрации.">
         <form className="auth-form">
           <fieldset className="auth-form__inputs-box">
             <legend className="auth-form__title">Регистрация</legend>

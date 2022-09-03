@@ -9,7 +9,12 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { api } from '../utils/api';
 import { CurrentUserInfo } from '../contexts/CurrentUserContext';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Redirect,
+  Route,
+  Switch
+} from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Registration from './Registration';
@@ -24,7 +29,7 @@ export default function App() {
   const [deletingCard, setDeletingCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -131,12 +136,12 @@ export default function App() {
   };
 
   return (
-    <Router>
+    <BrowserRouter>
       <div className="page">
         <CurrentUserInfo.Provider value={currentUser}>
-          <Header />
+          <Header loggedIn={loggedIn} />
           <Switch>
-            <ProtectedRoute
+            {/* <ProtectedRoute
               loggedIn={loggedIn}
               component={Main}
               onEditAvatar={handleEditAvatarClick}
@@ -153,7 +158,28 @@ export default function App() {
               cards={cards}
               exact
               path="/"
-            />
+            /> */}
+            <Route exact path="/">
+              {loggedIn ? (
+                <Main
+                  onEditAvatar={handleEditAvatarClick}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onCardLike={handleCardLike}
+                  onCardDelete={setDeletingCard}
+                  onCardClick={handleCardClick}
+                  selectedCard={selectedCard}
+                  isEditAvatarPopupOpen={isEditAvatarPopupOpen}
+                  isEditProfilePopupOpen={isEditProfilePopupOpen}
+                  isAddPlacePopupOpen={isAddPlacePopupOpen}
+                  closeAllPopups={closeAllPopups}
+                  cards={cards}
+                />
+              ) : (
+                <Redirect to="/sign-in" />
+              )}
+            </Route>
+            
             <Route path="/sign-in">
               <Login />
             </Route>
@@ -192,6 +218,6 @@ export default function App() {
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         </CurrentUserInfo.Provider>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
