@@ -21,8 +21,12 @@ class Api {
   }
 
   _handlerPromise(res) {
-    if (res.ok) return res.json();
-    else return Promise.reject(`Ошибка ${res.status}.`);
+    if (res.ok) { return res.json() };
+    const status = res.status;
+    return res.json().then((err) => {
+      err.status = status;
+      return Promise.reject(err);
+    })
   }
 
   getUserInfo() {

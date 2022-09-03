@@ -13,8 +13,10 @@ export default function EditProfilePopup({
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
+    if(currentUser.name && currentUser.about) {
+      setName(currentUser.name);
+      setDescription(currentUser.about);
+    }
   }, [currentUser, isOpen]);
 
   const handleSubmit = e => {
