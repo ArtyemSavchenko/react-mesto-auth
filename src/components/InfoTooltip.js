@@ -2,9 +2,9 @@ import Popup from './Popup';
 import successIcon from '../images/icon-success.svg';
 import failureIcon from '../images/icon-failure.svg';
 
-export default function InfoTooltip({ isOpen, success }) {
+export default function InfoTooltip({ isOpen, success, onClose }) {
   return (
-    <Popup window isOpen={isOpen}>
+    <Popup window isOpen={isOpen} onClose={onClose}>
       {success ? (
         <div className="reg-info">
           <img className="reg-info__img" src={successIcon} />

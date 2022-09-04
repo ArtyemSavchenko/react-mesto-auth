@@ -125,6 +125,17 @@ export default function App() {
       });
   };
 
+  const handleRegistration = isResOk => {
+    if (isResOk) {
+      setRegistrationStatus(true);
+      setIsInfoTooltipOpen(true);
+    }
+    else {
+      setRegistrationStatus(false);
+      setIsInfoTooltipOpen(true);
+    }
+  }
+
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
@@ -162,7 +173,7 @@ export default function App() {
               <Login />
             </Route>
             <Route path="/sign-up">
-              <Registration />
+              <Registration onRegistration={handleRegistration}/>
             </Route>
             <Route path="*">
               <NotFoundPage />
@@ -195,7 +206,7 @@ export default function App() {
             deletingCard={deletingCard}
           />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-          <InfoTooltip isOpen={isInfoTooltipOpen} success={registrationStatus}></InfoTooltip>
+          <InfoTooltip isOpen={isInfoTooltipOpen} success={registrationStatus} onClose={closeAllPopups}></InfoTooltip>
         </CurrentUserInfo.Provider>
       </div>
     </BrowserRouter>
