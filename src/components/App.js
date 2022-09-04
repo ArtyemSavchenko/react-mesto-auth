@@ -18,6 +18,8 @@ import NotFoundPage from './NotFoundPage';
 import InfoTooltip from './InfoTooltip';
 
 export default function App() {
+  const history = useHistory();
+
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -126,12 +128,12 @@ export default function App() {
       });
   };
 
-  const history = useHistory();
   const handleLogin = (email, password) => {
     auth
       .authorize(email, password)
       .then((data) => {
         console.log(data);
+        setCurrentUser({ ...currentUser, email });
         setLoggedIn(true);
         history.push('/');
       })
