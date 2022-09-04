@@ -14,17 +14,20 @@ import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Registration from './Registration';
 import NotFoundPage from './NotFoundPage';
+import InfoTooltip from './InfoTooltip';
 
 export default function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false)
+  const [registrationStatus, setRegistrationStatus] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [deletingCard, setDeletingCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -128,6 +131,7 @@ export default function App() {
     setIsAddPlacePopupOpen(false);
     setSelectedCard({});
     setDeletingCard({});
+    setIsInfoTooltipOpen(false);
   };
 
   return (
@@ -191,6 +195,7 @@ export default function App() {
             deletingCard={deletingCard}
           />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+          <InfoTooltip isOpen={isInfoTooltipOpen} success={registrationStatus}></InfoTooltip>
         </CurrentUserInfo.Provider>
       </div>
     </BrowserRouter>
