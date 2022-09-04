@@ -1,25 +1,12 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import * as auth from '../utils/authApi';
 
 export default function Login({ onLogin }) {
-  const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = e => {
     e.preventDefault();
-    auth
-      .authorization(email, password)
-      .then(() => {
-        setEmail('');
-        setPassword('');
-        onLogin(email);
-        history.push('/');
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    onLogin(email, password);
   };
 
   return (

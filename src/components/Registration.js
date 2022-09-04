@@ -1,26 +1,13 @@
 import { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import * as auth from '../utils/authApi';
+import { Link } from 'react-router-dom';
 
 export default function Registration({ onRegistration }) {
-  const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const hamdleRegistration = e => {
     e.preventDefault();
-    auth
-      .register(email, password)
-      .then(() => {
-        setEmail('');
-        setPassword('');
-        onRegistration(true);
-        history.push('/sign-in');
-      })
-      .catch(err => {
-        console.log(err);
-        onRegistration(false);
-      });
+    onRegistration(email, password);
   };
 
   return (

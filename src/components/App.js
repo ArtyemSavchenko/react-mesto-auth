@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter, Route, Switch, useHistory, } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -8,8 +9,8 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { api } from '../utils/api';
+import * as auth from '../utils/authApi';
 import { CurrentUserInfo } from '../contexts/CurrentUserContext';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Registration from './Registration';
@@ -20,8 +21,8 @@ export default function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false)
-  const [registrationStatus, setRegistrationStatus] = useState(false)
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const [registrationStatus, setRegistrationStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [deletingCard, setDeletingCard] = useState({});
@@ -125,21 +126,35 @@ export default function App() {
       });
   };
 
-  const handleRegistration = isResOk => {
-    if (isResOk) {
-      setRegistrationStatus(true);
-      setIsInfoTooltipOpen(true);
-    }
-    else {
-      setRegistrationStatus(false);
-      setIsInfoTooltipOpen(true);
-    }
-  }
+  const history = useHistory();
+  const handleLogin = (email, password) => {
+    auth
+      .authorize(email, password)
+      .then((data) => {
+        console.log(data);
+        setLoggedIn(true);
+        history.push('/');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
-  const handleLogin = (email) => {
-    setCurrentUser({...currentUser, email });
-    setLoggedIn(true);
-  }
+  const handleRegistration = (email, password) => {
+    auth
+      .register(email, password)
+      .then(() => {
+        setRegistrationStatus(true);
+        setIsInfoTooltipOpen(true);
+        history.push('/sign-in');
+      })
+      .catch(err => {
+        setRegistrationStatus(false);
+        setIsInfoTooltipOpen(true);
+        console.log(err);
+      });
+  };
+
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
@@ -151,11 +166,16 @@ export default function App() {
   };
 
   return (
-    <BrowserRouter>
       <div className="page">
         <CurrentUserInfo.Provider value={currentUser}>
           <Header loggedIn={loggedIn} />
           <Switch>
+            <Route path="/sign-in">
+              <Login onLogin={handleLogin} />
+            </Route>
+            <Route path="/sign-up">
+              <Registration onRegistration={handleRegistration} />
+            </Route>
             <ProtectedRoute
               loggedIn={loggedIn}
               component={Main}
@@ -171,15 +191,8 @@ export default function App() {
               isAddPlacePopupOpen={isAddPlacePopupOpen}
               closeAllPopups={closeAllPopups}
               cards={cards}
-              exact={true}
               path="/"
             />
-            <Route path="/sign-in">
-              <Login onLogin={handleLogin} />
-            </Route>
-            <Route path="/sign-up">
-              <Registration onRegistration={handleRegistration}/>
-            </Route>
             <Route path="*">
               <NotFoundPage />
             </Route>
@@ -211,9 +224,12 @@ export default function App() {
             deletingCard={deletingCard}
           />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-          <InfoTooltip isOpen={isInfoTooltipOpen} success={registrationStatus} onClose={closeAllPopups}></InfoTooltip>
+          <InfoTooltip
+            isOpen={isInfoTooltipOpen}
+            success={registrationStatus}
+            onClose={closeAllPopups}
+          ></InfoTooltip>
         </CurrentUserInfo.Provider>
       </div>
-    </BrowserRouter>
   );
 }

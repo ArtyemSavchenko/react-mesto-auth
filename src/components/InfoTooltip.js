@@ -7,12 +7,12 @@ export default function InfoTooltip({ isOpen, success, onClose }) {
     <Popup window isOpen={isOpen} onClose={onClose}>
       {success ? (
         <div className="reg-info">
-          <img className="reg-info__img" src={successIcon} />
+          <img className="reg-info__img" src={successIcon} alt="Иконка с галочкой." />
           <p className="reg-info__text">Вы успешно зарегистрировались!</p>
         </div>
       ) : (
         <div className="reg-info">
-          <img className="reg-info__img" src={failureIcon} />
+          <img className="reg-info__img" src={failureIcon} alt="Иконка с крестиком." />
           <p className="reg-info__text">
             Что-то пошло не так! Попробуйте ещё раз.
           </p>
