@@ -13,7 +13,7 @@ import * as auth from '../utils/authApi';
 import { CurrentUserInfo } from '../contexts/CurrentUserContext';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
-import Registration from './Registration';
+import Register from './Register';
 import NotFoundPage from './NotFoundPage';
 import InfoTooltip from './InfoTooltip';
 
@@ -202,7 +202,7 @@ export default function App() {
             <Login onLogin={handleLogin} />
           </Route>
           <Route path="/sign-up">
-            <Registration onRegistration={handleRegistration} />
+            <Register onRegistration={handleRegistration} />
           </Route>
           <ProtectedRoute
             loggedIn={loggedIn}
