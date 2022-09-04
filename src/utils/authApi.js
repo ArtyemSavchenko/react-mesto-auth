@@ -36,8 +36,8 @@ export const authorize = (email, password) => {
   }).then(statusCheck);
 };
 
-export const tokenCheck = jwt => {
-  return fetch(`${BASE_URL}/signin`, {
+export const checkToken = jwt => {
+  return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

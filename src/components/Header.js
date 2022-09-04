@@ -1,17 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
-import { CurrentUserInfo } from '../contexts/CurrentUserContext';
 import logo from '../images/logo.svg';
 
-export default function Header() {
-  const user = useContext(CurrentUserInfo);
-  const [email, setEmail] = useState('');
-
-  useEffect(() => {
-    if (!!user && !!user.email) {
-      setEmail(user.email);
-    }
-  }, [user]);
+export default function Header({ onSignOut, userEmail }) {
 
   return (
     <header className="header page__section">
@@ -19,8 +9,8 @@ export default function Header() {
       <Switch>
         <Route exact path="/">
           <div className="header__user-info-box">
-            <p className="header__text">{email}</p>
-            <button type="button" className="header__link">
+            <p className="header__text">{userEmail}</p>
+            <button onClick={onSignOut} type="button" className="header__link">
               Выйти
             </button>
           </div>
