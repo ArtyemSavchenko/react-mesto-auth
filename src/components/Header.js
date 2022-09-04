@@ -1,22 +1,25 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { CurrentUserInfo } from '../contexts/CurrentUserContext';
 import logo from '../images/logo.svg';
 
 export default function Header() {
   const user = useContext(CurrentUserInfo);
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    if (!!user && !!user.email) {
+      setEmail(user.email);
+    }
+  }, [user]);
 
   return (
     <header className="header page__section">
-      <img
-        src={logo}
-        alt="Логотип Место Россия."
-        className="logo"
-      />
+      <img src={logo} alt="Логотип Место Россия." className="logo" />
       <Switch>
         <Route exact path="/">
           <div className="header__user-info-box">
-            <p className="header__text">{user.name}</p>
+            <p className="header__text">{email}</p>
             <button type="button" className="header__link">
               Выйти
             </button>

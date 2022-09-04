@@ -136,6 +136,11 @@ export default function App() {
     }
   }
 
+  const handleLogin = (email) => {
+    setCurrentUser({...currentUser, email });
+    setLoggedIn(true);
+  }
+
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
@@ -170,7 +175,7 @@ export default function App() {
               path="/"
             />
             <Route path="/sign-in">
-              <Login />
+              <Login onLogin={handleLogin} />
             </Route>
             <Route path="/sign-up">
               <Registration onRegistration={handleRegistration}/>

@@ -7,19 +7,18 @@ export default function Registration({ onRegistration }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const hamdleRegistration = (e) => {
+  const hamdleRegistration = e => {
     e.preventDefault();
     auth
       .register(email, password)
-      .then(res => {
-        console.log(res);
+      .then(() => {
         setEmail('');
         setPassword('');
         onRegistration(true);
-        history.push('./sign-in');
+        history.push('/sign-in');
       })
-      .catch(err => { 
-        console.log(err)
+      .catch(err => {
+        console.log(err);
         onRegistration(false);
       });
   };
