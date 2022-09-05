@@ -16,7 +16,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  transition: all .2s linear;
+  transition: all .3s linear;
 }
 
 .burger-btn__cross::after {
@@ -28,5 +28,5 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  transition: all .2s linear;
+  transition: all .3s linear;
 }
