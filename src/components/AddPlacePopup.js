@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 export default function AddPlacePopup({
@@ -9,6 +9,13 @@ export default function AddPlacePopup({
 }) {
   const [cardName, setCardName] = useState('');
   const [cardUrl, setCardUrl] = useState('');
+
+  useEffect(() => {
+    if (isOpen) {
+      setCardName('');
+      setCardUrl('');
+    }
+  }, [isOpen]);
 
   const handleChangeCardName = e => {
     setCardName(e.target.value);
@@ -24,8 +31,6 @@ export default function AddPlacePopup({
       name: cardName,
       link: cardUrl
     });
-    setCardName('');
-    setCardUrl('');
   };
 
   return (

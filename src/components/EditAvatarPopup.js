@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 export default function EditAvatarPopup({
@@ -7,12 +7,17 @@ export default function EditAvatarPopup({
   onUpdateAvatar,
   isLoading
 }) {
-  const inputUrlref = useRef();
+  const [avatarUrl, setAvatarUrl] = useState('qwe');
+
+  useEffect(() => {
+    if (isOpen) {
+      setAvatarUrl('');
+    }
+  }, [isOpen])
 
   const handleSubmit = e => {
     e.preventDefault();
-    onUpdateAvatar(inputUrlref.current.value);
-    inputUrlref.current.value = '';
+    onUpdateAvatar(avatarUrl);
   };
 
   return (
@@ -32,7 +37,8 @@ export default function EditAvatarPopup({
         name="input-user-pic-url"
         placeholder="Ссылка на картинку"
         required
-        ref={inputUrlref}
+        value={avatarUrl}
+        onChange={e => setAvatarUrl(e.target.value)}
       />
       <span className="popup__input-error user-pic-url-input-error"></span>
     </PopupWithForm>

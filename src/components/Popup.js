@@ -1,25 +1,25 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 export default function Popup({ isOpen, onClose, children, window }) {
   const handlerOverlayClick = e => {
-    if (e.target === e.currentTarget) onClose();
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
   };
 
-  useEffect(() => {
-    document.addEventListener('keyup', e => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    });
-
-    return () => {
-      document.removeEventListener('keyup', e => {
-        if (e.key === 'Escape') {
-          onClose();
-        }
-      });
-    };
+  const handlePressEsc = useCallback(e => {
+    if (e.key === 'Escape') {
+      onClose();
+    }
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('keyup', handlePressEsc);
+    } else {
+      document.removeEventListener('keyup', handlePressEsc);
+    }
+  }, [isOpen]);
 
   return (
     <div
@@ -33,7 +33,7 @@ export default function Popup({ isOpen, onClose, children, window }) {
           type="button"
           aria-label="Закрыть форму."
           onClick={onClose}
-        ></button>
+        />
       </div>
     </div>
   );
