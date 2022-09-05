@@ -1,6 +1,10 @@
 @import url(./vendor/normalize.css);
 @import url(./vendor/fonts/fonts.css);
 
+@import url(./blocks/burger-btn/burger-btn.css);
+@import url(./blocks/burger-btn/__cross/burger-btn__cross.css);
+@import url(./blocks/burger-btn/_opened-menu/burger-btn_opened-menu.css);
+
 @import url(./blocks/page/page.css);
 @import url(./blocks/page/__content/page__content.css);
 @import url(./blocks/page/__section/page__section.css);
@@ -9,8 +13,12 @@
 
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__link/header__link.css);
+@import url(./blocks/header/__link/_right/header__link_right.css);
+@import url(./blocks/header/__logo/header__logo.css);
 @import url(./blocks/header/__text/header__text.css);
 @import url(./blocks/header/__user-info-box/header__user-info-box.css);
+@import url(./blocks/header/__user-info-box/_opened/header__user-info-box_opened.css);
+@import url(./blocks/header/__burger-btn/header__burger-btn.css);
 
 @import url(./blocks/not-found/not-found.css);
 @import url(./blocks/not-found/__link/not-found__link.css);
