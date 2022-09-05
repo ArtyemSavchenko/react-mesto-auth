@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -14,7 +14,6 @@ import { CurrentUserInfo } from '../contexts/CurrentUserContext';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
-import NotFoundPage from './NotFoundPage';
 import InfoTooltip from './InfoTooltip';
 
 export default function App() {
@@ -23,15 +22,37 @@ export default function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
-  const [registrationStatus, setRegistrationStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [deletingCard, setDeletingCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState('')
+  const [userEmail, setUserEmail] = useState('');
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState({
+    isOpened: false,
+    successStatus: false
+  });
+
+  const checkToken = () => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      auth
+        .checkToken(token)
+        .then(res => {
+          setUserEmail(res.data.email);
+          setLoggedIn(true);
+          history.push('/');
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  };
+
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -41,32 +62,6 @@ export default function App() {
       })
       .catch(err => console.log(err));
   }, []);
-
-  useEffect(() => {
-    checkToken();
-  }, [history]);
-
-  const checkToken = () => {
-    const token = localStorage.getItem('jwt');
-    if (token) {
-      auth.checkToken(token)
-      .then(res => {
-        setUserEmail(res.data.email);
-        setLoggedIn(true);
-        history.push('/');
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    }
-  };
-
-  const handleSignOut = () => {
-    setLoggedIn(false);
-    localStorage.removeItem('jwt');
-    setUserEmail('');
-    history.push('/sign-in');
-  }
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -169,17 +164,28 @@ export default function App() {
       });
   };
 
+  const handleSignOut = () => {
+    setLoggedIn(false);
+    localStorage.removeItem('jwt');
+    setUserEmail('');
+    history.push('/sign-in');
+  };
+
   const handleRegistration = (email, password) => {
     auth
       .register(email, password)
       .then(() => {
-        setRegistrationStatus(true);
-        setIsInfoTooltipOpen(true);
+        setIsInfoTooltipOpen({
+          isOpened: true,
+          successStatus: true
+        });
         history.push('/sign-in');
       })
       .catch(err => {
-        setRegistrationStatus(false);
-        setIsInfoTooltipOpen(true);
+        setIsInfoTooltipOpen({
+          isOpened: true,
+          successStatus: false
+        });
         console.log(err);
       });
   };
@@ -190,13 +196,17 @@ export default function App() {
     setIsAddPlacePopupOpen(false);
     setSelectedCard({});
     setDeletingCard({});
-    setIsInfoTooltipOpen(false);
+    setIsInfoTooltipOpen({ ...isInfoTooltipOpen, isOpened: false });
   };
 
   return (
     <div className="page">
       <CurrentUserInfo.Provider value={currentUser}>
-        <Header loggedIn={loggedIn} onSignOut={handleSignOut} userEmail={userEmail} />
+        <Header
+          loggedIn={loggedIn}
+          onSignOut={handleSignOut}
+          userEmail={userEmail}
+        />
         <Switch>
           <Route path="/sign-in">
             <Login onLogin={handleLogin} />
@@ -219,11 +229,9 @@ export default function App() {
             isAddPlacePopupOpen={isAddPlacePopupOpen}
             closeAllPopups={closeAllPopups}
             cards={cards}
+            checkToken={checkToken}
             path="/"
           />
-          <Route path="*">
-            <NotFoundPage />
-          </Route>
         </Switch>
 
         <Footer />
@@ -254,7 +262,6 @@ export default function App() {
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         <InfoTooltip
           isOpen={isInfoTooltipOpen}
-          success={registrationStatus}
           onClose={closeAllPopups}
         ></InfoTooltip>
       </CurrentUserInfo.Provider>
