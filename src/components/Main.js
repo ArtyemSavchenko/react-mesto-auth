@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import Card from './Card';
 import { CurrentUserInfo } from '../contexts/CurrentUserContext';
+import Spinner from './UI/Spinner';
 
 export default function Main({
   onEditAvatar,
