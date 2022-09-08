@@ -15,6 +15,8 @@ import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
 import InfoTooltip from './InfoTooltip';
+import Notofications from './shared/Notifications/Notofications';
+import { useNotification } from './shared/Notifications/useNotification';
 
 export default function App() {
   const history = useHistory();
@@ -33,6 +35,8 @@ export default function App() {
     isOpened: false,
     successStatus: false
   });
+
+  const [notifications, pushNotification] = useNotification();
 
   const checkToken = () => {
     const token = localStorage.getItem('jwt');
@@ -61,7 +65,12 @@ export default function App() {
           setCurrentUser(userData);
           setCards(cards);
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          pushNotification({
+            type: 'error',
+            text: err.message
+          });
+        });
     }
   }, [loggedIn]);
 
@@ -87,7 +96,12 @@ export default function App() {
       .then(newCard => {
         setCards(cards => cards.map(c => (c._id === card._id ? newCard : c)));
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        pushNotification({
+          type: 'error',
+          text: err.message
+        });
+      });
   };
 
   const handleCardDelete = () => {
@@ -98,7 +112,12 @@ export default function App() {
         setCards(cards => cards.filter(c => c._id !== deletingCard._id));
         closeAllPopups();
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        pushNotification({
+          type: 'error',
+          text: err.message
+        });
+      })
       .finally(() => {
         setIsLoading(false);
       });
@@ -113,7 +132,10 @@ export default function App() {
         closeAllPopups();
       })
       .catch(err => {
-        console.log(err);
+        pushNotification({
+          type: 'error',
+          text: err.message
+        });
       })
       .finally(() => {
         setIsLoading(false);
@@ -129,7 +151,10 @@ export default function App() {
         closeAllPopups();
       })
       .catch(err => {
-        console.log(err);
+        pushNotification({
+          type: 'error',
+          text: err.message
+        });
       })
       .finally(() => {
         setIsLoading(false);
@@ -145,7 +170,10 @@ export default function App() {
         closeAllPopups();
       })
       .catch(err => {
-        console.log(err);
+        pushNotification({
+          type: 'error',
+          text: err.message
+        });
       })
       .finally(() => {
         setIsLoading(false);
@@ -162,7 +190,10 @@ export default function App() {
         history.push('/');
       })
       .catch(err => {
-        console.log(err);
+        pushNotification({
+          type: 'error',
+          text: err.message
+        });
       });
   };
 
@@ -171,6 +202,10 @@ export default function App() {
     localStorage.removeItem('jwt');
     setUserEmail('');
     history.push('/sign-in');
+    pushNotification({
+      type: 'done',
+      text: '👋 До свидания'
+    });
   };
 
   const handleRegistration = (email, password) => {
@@ -204,6 +239,7 @@ export default function App() {
   return (
     <div className="page">
       <CurrentUserInfo.Provider value={currentUser}>
+        <Notofications notifications={notifications} delayClose={10000} />
         <Header
           loggedIn={loggedIn}
           onSignOut={handleSignOut}
