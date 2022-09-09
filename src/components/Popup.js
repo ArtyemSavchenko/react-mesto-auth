@@ -24,7 +24,7 @@ export default function Popup({ isOpen, onClose, children, window }) {
   return (
     <div
       className={`popup${isOpen ? ' popup_active' : ''}`}
-      onClick={handlerOverlayClick}
+      onMouseDown={handlerOverlayClick}
     >
       <div className={window ? 'popup__window' : 'popup__content-box'}>
         {children}

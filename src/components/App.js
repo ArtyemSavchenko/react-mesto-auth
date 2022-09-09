@@ -49,7 +49,10 @@ export default function App() {
           history.push('/');
         })
         .catch(err => {
-          console.log(err);
+          pushNotification({
+            type: 'error',
+            text: err.message
+          });
         });
     }
   };
