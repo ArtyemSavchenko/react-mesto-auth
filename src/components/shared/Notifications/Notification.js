@@ -2,14 +2,10 @@ import { useEffect, useState } from 'react';
 import styles from './Notification.module.css';
 
 const Notification = ({ id, type, heading, text, onClose, delayClose }) => {
-  const [notificationClass, setNotificationClass] = useState(
-    styles.notification
-  );
+  const [state, setState] = useState('');
 
   const closeNotification = () => {
-    setNotificationClass(string =>
-      string.replace(styles.notificationOnLoad, styles.notificationOnClose)
-    );
+    setState('close');
     setTimeout(() => {
       onClose(id);
     }, 1500);
@@ -20,43 +16,34 @@ const Notification = ({ id, type, heading, text, onClose, delayClose }) => {
   };
 
   useEffect(() => {
-    setNotificationClass(classNot => {
-      if (type === 'done') {
-        return classNot + ' ' + styles.notificationDone;
-      }
-      if (type === 'error') {
-        return classNot + ' ' + styles.notificationError;
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (delayClose && delayClose > 0) {
+    setState('open');
+    if (delayClose > 0) {
       setTimeout(() => {
         closeNotification();
       }, delayClose);
     }
   }, []);
 
-  useEffect(() => {
-    setNotificationClass(classNot => {
-      return classNot + ' ' + styles.notificationOnLoad;
-    });
-  }, []);
-
   return (
-    <article aria-label="Уведомление" className={notificationClass}>
+    <div
+      className={`${styles.notification} ${
+        type === 'success' ? styles.notification_type_success : ''
+      }${type === 'error' ? styles.notification_type_error : ''} ${
+        state === 'open' ? styles.notification_state_open : ''
+      }${state === 'close' ? styles.notification_state_close : ''}
+      `}
+    >
       <div>
-        <p className={styles.heading}>{heading}</p>
-        <p className={styles.text}>{text}</p>
+        <p className={styles.notification__heading}>{heading}</p>
+        <p className={styles.notification__text}>{text}</p>
       </div>
       <button
         type="button"
-        className={styles.btnClose}
+        className={styles.notification__btnClose}
         onClick={handlerBtnCloseClick}
         aria-label="Закрыть уведомление"
       />
-    </article>
+    </div>
   );
 };
 export default Notification;

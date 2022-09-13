@@ -206,7 +206,7 @@ export default function App() {
     setUserEmail('');
     history.push('/sign-in');
     pushNotification({
-      type: 'done',
+      type: 'success',
       text: '👋 До свидания'
     });
   };

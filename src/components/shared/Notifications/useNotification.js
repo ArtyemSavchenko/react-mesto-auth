@@ -3,16 +3,18 @@ import { useState } from 'react';
 export const useNotification = () => {
   const [notifications, setNotifications] = useState([]);
 
-  const pushNotification = notification => {
+  const pushNotification = (notification, delayClose = null) => {
     const date = new Date();
     const newId = date.getSeconds() + date.getMilliseconds() + Math.random();
-    setNotifications(nots => [
-      {
-        ...notification,
-        id: newId
-      },
-      ...nots
-    ]);
+    const newNotification = {
+      ...notification,
+      id: newId
+    };
+    if (delayClose !== null) {
+      newNotification.delayClose = delayClose;
+    }
+    setNotifications(nots => [newNotification, ...nots]);
+    return newId;
   };
 
   const closeNotification = id => {
