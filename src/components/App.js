@@ -17,6 +17,7 @@ import Register from './Register';
 import InfoTooltip from './InfoTooltip';
 import Notofications from './shared/Notifications/Notofications';
 import { useNotification } from './shared/Notifications/useNotification';
+import Spinner from './shared/Spinner';
 
 export default function App() {
   const history = useHistory();
@@ -25,6 +26,7 @@ export default function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [spinnerText, setSpinnerText] = useState('');
   const [selectedCard, setSelectedCard] = useState({});
   const [deletingCard, setDeletingCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
@@ -41,6 +43,8 @@ export default function App() {
   const checkToken = () => {
     const token = localStorage.getItem('jwt');
     if (token) {
+      setSpinnerText('проверяем токен');
+      setIsLoading(true);
       auth
         .checkToken(token)
         .then(res => {
@@ -53,6 +57,10 @@ export default function App() {
             type: 'error',
             text: err.message
           });
+        })
+        .finally(() => {
+          setIsLoading(false);
+          setSpinnerText('');
         });
     }
   };
@@ -250,7 +258,11 @@ export default function App() {
         />
         <Switch>
           <Route path="/sign-in">
-            <Login onLogin={handleLogin} />
+            {isLoading ? (
+              <Spinner text={spinnerText} />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )}
           </Route>
           <Route path="/sign-up">
             <Register onRegistration={handleRegistration} />
@@ -274,7 +286,6 @@ export default function App() {
             path="/"
           />
         </Switch>
-
         <Footer />
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
